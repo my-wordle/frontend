@@ -1,5 +1,7 @@
+import { Outlet } from 'react-router';
+
 function App() {
-    return <header className="text-amber-700 text-8xl">Hello world</header>;
+    return <Outlet />;
 }
 
 export default App;
