@@ -1,4 +1,4 @@
-import type { FC, ReactNode } from 'react';
+import { useEffect, useState, type FC, type ReactNode } from 'react';
 import Backspace from '@/assets/icons/backspace.svg?react';
 import { cn } from '@/lib/utils';
 
@@ -8,22 +8,24 @@ interface Props {
 }
 
 export const Key: FC<Props> = ({ symbol, onClick }) => {
+    const [isActive, setIsActive] = useState<boolean>(false);
+
     const handleClick = () => {
         onClick(symbol);
     };
 
     const render = (symbol: string): { key: ReactNode; styles: string } => {
         switch (symbol) {
-            case 'Enter':
+            case 'enter':
                 return {
                     key: (
                         <h1 className="text-sm font-semibold text-center">
-                            {symbol}
+                            Enter
                         </h1>
                     ),
                     styles: 'w-16',
                 };
-            case 'Backspace':
+            case 'backspace':
                 return {
                     key: <Backspace className="min-w-8 min-h-8 text-black" />,
                     styles: 'w-16',
@@ -33,11 +35,32 @@ export const Key: FC<Props> = ({ symbol, onClick }) => {
         }
     };
 
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key.toLowerCase() === symbol) {
+                handleClick();
+                setIsActive(true);
+                setTimeout(() => {
+                    setIsActive(false);
+                }, 100);
+            } else {
+                setIsActive(false);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    });
+
     return (
         <button
             className={cn(
-                'bg-[#81838450] p-4 font-semibold text- rounded-md transition-all hover:bg-[#4d4e4e50] active:scale-105 active:outline-none h-12 flex justify-center items-center',
-                render(symbol).styles
+                'bg-[#81838450] p-4 font-semibold text-lg scale-100 rounded-md transition-all hover:bg-[#4d4e4e50] active:scale-105 active:outline-none h-12 flex justify-center items-center',
+                render(symbol).styles,
+                isActive && 'scale-105 bg-[#4d4e4e50]'
             )}
             onClick={handleClick}
         >
