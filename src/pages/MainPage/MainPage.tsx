@@ -1,9 +1,10 @@
-import KeyBoard from '@/components/ui-mod/KeyBoard';
+import Board from '@/components/ui-mod/Board';
 
 export const MainPage = () => {
     return (
         <div className="w-screen h-screen flex justify-center items-center">
-            <KeyBoard />
+            {/* <GameField /> */}
+            <Board />
         </div>
     );
 };
