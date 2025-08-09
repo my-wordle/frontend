@@ -3,9 +3,10 @@ import { useEffect, useId, useRef, useState, type FC } from 'react';
 interface Props {
     active: boolean;
     onInsert: (symbol: string) => void;
+    disabled?: boolean;
 }
 
-export const Slot: FC<Props> = ({ active, onInsert }) => {
+export const Slot: FC<Props> = ({ active, onInsert, disabled = false }) => {
     const [symbol, setSymbol] = useState<string>('');
     const inputRef = useRef<HTMLInputElement | null>(null);
     const id: string = useId();
@@ -23,7 +24,7 @@ export const Slot: FC<Props> = ({ active, onInsert }) => {
         if (inputRef.current) {
             inputRef.current.focus();
         }
-    }, [active]);
+    }, [active, disabled]);
 
     return (
         <input
@@ -33,7 +34,7 @@ export const Slot: FC<Props> = ({ active, onInsert }) => {
             value={symbol.toUpperCase()}
             onChange={handleChange}
             ref={inputRef}
-            disabled={!active}
+            disabled={!active || disabled}
         />
     );
 };

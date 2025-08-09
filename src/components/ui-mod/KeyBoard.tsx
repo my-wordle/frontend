@@ -1,9 +1,25 @@
 import { keyboardKeys } from '@/constants/keyboard';
 import Key from './Key';
+import type { FC } from 'react';
 
-export const KeyBoard = () => {
+interface Props {
+    onEnter: () => void;
+}
+
+export const KeyBoard: FC<Props> = ({ onEnter }) => {
     const handleClick = (symbol: string) => {
-        console.log(symbol);
+        switch (symbol) {
+            case 'enter':
+                onEnter();
+                break;
+            case 'backspace':
+                window.dispatchEvent(new CustomEvent('onBackspace'));
+                break;
+            default:
+                window.dispatchEvent(
+                    new CustomEvent('onType', { detail: { symbol } })
+                );
+        }
     };
 
     return (

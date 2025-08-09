@@ -1,9 +1,9 @@
-import Board from '@/components/ui-mod/Board';
+import Board from "@/components/ui-mod/Board";
+
 
 export const MainPage = () => {
     return (
-        <div className="w-screen h-screen flex justify-center items-center">
-            {/* <GameField /> */}
+        <div className="w-screen h-screen flex justify-evenly items-center flex-col">
             <Board />
         </div>
     );
