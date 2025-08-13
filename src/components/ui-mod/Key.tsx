@@ -23,15 +23,15 @@ export const Key: FC<Props> = ({ symbol, onClick }) => {
                             Enter
                         </h1>
                     ),
-                    styles: 'w-16',
+                    styles: 'w-18',
                 };
             case 'backspace':
                 return {
-                    key: <Backspace className="min-w-8 min-h-8 text-black" />,
-                    styles: 'w-16',
+                    key: <Backspace className="min-w-10 min-h-10 text-black" />,
+                    styles: 'w-18',
                 };
             default:
-                return { key: symbol.toUpperCase(), styles: 'w-8' };
+                return { key: symbol.toUpperCase(), styles: 'w-10' };
         }
     };
 
@@ -58,7 +58,7 @@ export const Key: FC<Props> = ({ symbol, onClick }) => {
     return (
         <button
             className={cn(
-                'bg-[#81838450] p-4 font-semibold text-lg scale-100 rounded-md transition-all hover:bg-[#4d4e4e50] active:scale-105 active:outline-none h-12 flex justify-center items-center',
+                'bg-[#81838450] p-4 font-semibold text-lg scale-100 rounded-md transition-all hover:bg-[#4d4e4e50] active:scale-105 active:outline-none h-14 flex justify-center items-center',
                 render(symbol).styles,
                 isActive && 'scale-105 bg-[#4d4e4e50]'
             )}
