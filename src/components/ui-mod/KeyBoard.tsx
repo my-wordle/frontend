@@ -3,25 +3,10 @@ import Key from './Key';
 import type { FC } from 'react';
 
 interface Props {
-    onEnter: () => void;
+    onClick: (symbol: string) => void;
 }
 
-export const KeyBoard: FC<Props> = ({ onEnter }) => {
-    const handleClick = (symbol: string) => {
-        switch (symbol) {
-            case 'enter':
-                onEnter();
-                break;
-            case 'backspace':
-                window.dispatchEvent(new CustomEvent('onBackspace'));
-                break;
-            default:
-                window.dispatchEvent(
-                    new CustomEvent('onType', { detail: { symbol } })
-                );
-        }
-    };
-
+export const KeyBoard: FC<Props> = ({ onClick }) => {
     return (
         <div className="grid grid-rows-3 gap-0.5">
             {keyboardKeys.map((row: string[], index: number) => (
@@ -29,7 +14,7 @@ export const KeyBoard: FC<Props> = ({ onEnter }) => {
                     {row.map((keyboardKey: string) => (
                         <Key
                             symbol={keyboardKey}
-                            onClick={handleClick}
+                            onClick={onClick}
                             key={keyboardKey}
                         />
                     ))}
