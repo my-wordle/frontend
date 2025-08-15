@@ -1,5 +1,4 @@
-import Board from "@/components/ui-mod/Board";
-
+import Board from '@/components/ui-mod/Board';
 
 export const MainPage = () => {
     return (

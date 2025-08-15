@@ -1,14 +1,32 @@
+import type { Color } from '@/lib/colorize-slots';
+import { cn } from '@/lib/utils';
 import { REGEXP_ONLY_CHARS } from 'input-otp';
 import { type FC } from 'react';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '../ui/input-otp';
-import { cn } from '@/lib/utils';
 
 interface Props {
     letters?: number;
     word: string;
+    colors: Color[];
 }
 
-export const GameField: FC<Props> = ({ letters = 5, word }) => {
+export const GameField: FC<Props> = ({ letters = 5, word, colors }) => {
+
+    const applyColors = (index: number) => {
+        if (!colors) return;
+
+        switch (colors[index]) {
+            case 'gray':
+                return 'bg-[#3A3A3C]';
+            case 'green':
+                return 'bg-[#538D4E]';
+            case 'yellow':
+                return 'bg-[#B59F3B]';
+            default:
+                return 'bg-transparent';
+        }
+    };
+
     return (
         <InputOTP maxLength={letters} value={word} pattern={REGEXP_ONLY_CHARS}>
             <InputOTPGroup>
@@ -17,9 +35,9 @@ export const GameField: FC<Props> = ({ letters = 5, word }) => {
                         index={index}
                         key={index}
                         className={cn(
-                            'data-[active=true]:scale-105 font-semibold text-lg w-14 h-14 p-4 rounded-none',
-                            word.length - 1 === index &&
-                                'scale-105'
+                            'font-bold text-2xl w-14 h-14 p-4 rounded-none',
+                            // "data-[active=true]:scale-105",
+                            applyColors(index)
                         )}
                     />
                 ))}
