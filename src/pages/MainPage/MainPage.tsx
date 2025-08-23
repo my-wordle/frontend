@@ -1,9 +1,9 @@
-import Board from '@/components/ui-mod/Board';
+import Greeting from './components/Greeting';
 
 export const MainPage = () => {
     return (
         <div className="w-screen h-screen flex justify-evenly items-center flex-col">
-            <Board />
+            <Greeting />
         </div>
     );
 };
