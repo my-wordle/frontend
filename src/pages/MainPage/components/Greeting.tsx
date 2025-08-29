@@ -59,13 +59,13 @@ export const Greeting = () => {
             {optionsVisible && (
                 <div className="flex gap-4 items-center">
                     <div id="playOption">
-                        <Button className="hover:bg-accent-foreground hover:text-white">
+                        <Button className="hover:bg-accent-foreground hover:text-white hover:dark:text-black">
                             Solo
                         </Button>
                     </div>
                     <div id="playOption">
                         <Button
-                            className="p-2 hover:bg-accent-foreground hover:text-white"
+                            className="p-2 hover:bg-accent-foreground hover:text-white hover:dark:text-black"
                             onClick={handleLeave}
                         >
                             <X />
