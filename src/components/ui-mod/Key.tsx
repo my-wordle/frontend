@@ -27,7 +27,7 @@ export const Key: FC<Props> = ({ symbol, onClick }) => {
                 };
             case 'backspace':
                 return {
-                    key: <Backspace className="min-w-10 min-h-10 text-black" />,
+                    key: <Backspace className="min-w-10 min-h-10" />,
                     styles: 'w-18',
                 };
             default:

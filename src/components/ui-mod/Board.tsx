@@ -23,7 +23,6 @@ export const Board: FC<Props> = ({ rows = 6 }) => {
     const handleClick = (symbol: string) => {
         if (symbol === 'enter') {
             if (words[activeRow].length === 5) {
-                console.log(words[activeRow]);
                 setColors((prevColors: Color[][]) => [
                     ...prevColors,
                     colorizeSlots({
@@ -52,7 +51,7 @@ export const Board: FC<Props> = ({ rows = 6 }) => {
 
     return (
         <>
-            <section>
+            <section className="flex flex-col gap-1">
                 {words.map((word: string, index: number) => (
                     <GameField key={index} word={word} colors={colors[index]} />
                 ))}

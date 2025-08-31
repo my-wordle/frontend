@@ -3,12 +3,16 @@ import useContextSafe from '@/hooks/useContextSafe';
 import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap';
 import { X } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { useRef, useState, type FC } from 'react';
 import GreetingAnimation from './GreetingAnimation';
 
 gsap.registerPlugin(useGSAP);
 
-export const Greeting = () => {
+interface Props {
+    onSoloSelect: () => void;
+}
+
+export const Greeting: FC<Props> = ({ onSoloSelect }) => {
     const [optionsVisible, setOptionsVisible] = useState<boolean>(false);
     const container = useRef<HTMLElement | null>(null);
     const contextSafe = useContextSafe(container);
@@ -41,6 +45,20 @@ export const Greeting = () => {
         });
     });
 
+    const handleSolo = () => {
+        gsap.to('#playOption', {
+            duration: 0.25,
+            y: -50,
+            opacity: 0,
+            stagger: {
+                each: 0.05,
+                from: 'edges',
+            },
+            ease: 'power2.inOut',
+            onComplete: onSoloSelect,
+        });
+    };
+
     return (
         <section
             className="h-1/2 w-1/4 flex flex-col justify-center items-center gap-12"
@@ -59,7 +77,10 @@ export const Greeting = () => {
             {optionsVisible && (
                 <div className="flex gap-4 items-center">
                     <div id="playOption">
-                        <Button className="hover:bg-accent-foreground hover:text-white hover:dark:text-black">
+                        <Button
+                            className="hover:bg-accent-foreground hover:text-white hover:dark:text-black"
+                            onClick={handleSolo}
+                        >
                             Solo
                         </Button>
                     </div>

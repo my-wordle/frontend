@@ -1,5 +1,10 @@
 import { Slider } from '@/components/ui/slider';
-import { useMemo, useReducer, type ComponentProps } from 'react';
+import { useMemo, useReducer, type ComponentProps, type FC } from 'react';
+import Button from '../ui-mod/Button';
+
+interface Props {
+    onSubmit?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+}
 
 interface Fragment {
     key: keyof State;
@@ -37,7 +42,7 @@ const defaultValues: State = {
     attempts: 6,
 };
 
-export const GameSettings = () => {
+export const GameSettings: FC<Props> = ({ onSubmit }) => {
     const [state, dispatch] = useReducer(reducer, defaultValues);
 
     const fragments: Fragment[] = useMemo(
@@ -73,7 +78,7 @@ export const GameSettings = () => {
     );
 
     return (
-        <form className="flex flex-col gap-12 p-8 w-[600px] h-[300px] border border-solid border-border rounded-xl">
+        <form className="flex flex-col gap-12 p-8 min-w-1/4 border border-solid border-border rounded-xl">
             <h1 className="w-full text-center font-semibold text-2xl">
                 Settings
             </h1>
@@ -88,6 +93,12 @@ export const GameSettings = () => {
                     </div>
                 ))}
             </section>
+
+            {onSubmit && (
+                <div className="w-full flex justify-center">
+                    <Button onClick={onSubmit}>Play</Button>
+                </div>
+            )}
         </form>
     );
 };

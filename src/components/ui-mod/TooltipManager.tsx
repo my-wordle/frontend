@@ -14,7 +14,7 @@ interface Props {
 
 export const TooltipManager: FC<Props> = ({ children, content, options }) => {
     return (
-        <Tooltip {...options?.provider}>
+        <Tooltip disableHoverableContent {...options?.provider}>
             <TooltipTrigger>{children}</TooltipTrigger>
             <TooltipContent {...options?.content}>{content}</TooltipContent>
         </Tooltip>

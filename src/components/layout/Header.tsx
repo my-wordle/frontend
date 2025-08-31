@@ -13,7 +13,6 @@ const iconClasses: string =
     'header-item w-8 h-8 cursor-pointer transition-transform hover:translate-y-1.5';
 
 const options: ComponentProps<typeof TooltipManager>['options'] = {
-    provider: { disableHoverableContent: true },
     content: { sideOffset: 20 },
 };
 
