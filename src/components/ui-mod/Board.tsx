@@ -2,7 +2,8 @@ import { dailyWords } from '@/constants/words';
 import { useRef, useState, type FC } from 'react';
 import GameField from './GameField';
 import KeyBoard from './KeyBoard';
-import { colorizeSlots, type Color } from '@/lib/colorize-slots';
+import { colorizeKeys, colorizeSlots, type Color } from '@/lib/colorize-slots';
+import type { KeyboardColors } from '@/types/colors';
 
 interface Props {
     rows?: number;
@@ -18,18 +19,32 @@ export const Board: FC<Props> = ({ rows = 6 }) => {
     );
     const [colors, setColors] = useState<Color[][]>([]);
     const [activeRow, setActiveRow] = useState<number>(0);
+    const [keyboardColors, setKeyboardColors] = useState<KeyboardColors>({});
     const dailyWord = useRef<string>(dailyWords[generateRandomNumber(7)]);
 
     const handleClick = (symbol: string) => {
         if (symbol === 'enter') {
             if (words[activeRow].length === 5) {
+                const currentColors: Color[] = colorizeSlots({
+                    correct: dailyWord.current.toUpperCase(),
+                    input: words[activeRow],
+                });
+
+                const currentKeys: KeyboardColors = colorizeKeys({
+                    currentWord: words[activeRow],
+                    colors: currentColors,
+                });
+
                 setColors((prevColors: Color[][]) => [
                     ...prevColors,
-                    colorizeSlots({
-                        correct: dailyWord.current.toUpperCase(),
-                        input: words[activeRow],
-                    }),
+                    currentColors,
                 ]);
+
+                setKeyboardColors((prevColors) => ({
+                    ...prevColors,
+                    ...currentKeys,
+                }));
+
                 setActiveRow((prevRow) => Math.min(prevRow + 1, rows - 1));
             }
             return;
@@ -57,7 +72,7 @@ export const Board: FC<Props> = ({ rows = 6 }) => {
                 ))}
             </section>
 
-            <KeyBoard onClick={handleClick} />
+            <KeyBoard onClick={handleClick} colors={keyboardColors} />
         </>
     );
 };

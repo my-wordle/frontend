@@ -6,4 +6,7 @@ export const dailyWords: string[] = [
     'saint',
     'block',
     'brace',
+    'angle',
+    'while',
+    'lance',
 ];

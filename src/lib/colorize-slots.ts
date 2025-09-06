@@ -1,3 +1,5 @@
+import type { KeyboardColors } from '@/types/colors';
+
 interface Args {
     correct: string;
     input: string;
@@ -32,4 +34,22 @@ export const colorizeSlots = ({ correct, input }: Args): Color[] => {
     }
 
     return colors;
+};
+
+interface ColorizeKeysArgs {
+    currentWord: string;
+    colors: Color[];
+}
+
+export const colorizeKeys = ({
+    currentWord,
+    colors,
+}: ColorizeKeysArgs): KeyboardColors => {
+    const keyboardColors: KeyboardColors = {};
+
+    for (let i = 0; i < currentWord.length; i++) {
+        keyboardColors[currentWord[i]] = colors[i];
+    }
+
+    return keyboardColors;
 };
