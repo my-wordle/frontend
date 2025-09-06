@@ -74,8 +74,9 @@ export const Key: FC<Props> = ({ symbol, onClick, color }) => {
 
     return (
         <button
+            id="keyboardKey"
             className={cn(
-                'bg-[#81838450] p-4 font-semibold text-lg scale-100 rounded-md transition-all hover:bg-[#4d4e4e50] active:scale-105 active:outline-none h-14 flex justify-center items-center',
+                'bg-[#81838450] p-4 font-semibold text-lg scale-100 rounded-md hover:bg-[#4d4e4e50] active:scale-105 active:outline-none h-14 flex justify-center items-center',
                 render(symbol).styles,
                 isActive && 'scale-105 bg-[#4d4e4e50]',
                 applyColors()
