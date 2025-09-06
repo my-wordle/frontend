@@ -10,10 +10,7 @@ export const MainPage = () => {
         setCurrentStep((prev: number) => prev + 1);
     };
 
-    const handleSubmit = (
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) => {
-        event.preventDefault();
+    const handleSubmit = () => {
         incrementStep();
     };
 

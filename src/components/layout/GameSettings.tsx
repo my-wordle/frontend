@@ -1,9 +1,14 @@
 import { Slider } from '@/components/ui/slider';
 import { useMemo, useReducer, type ComponentProps, type FC } from 'react';
 import Button from '../ui-mod/Button';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
+import useContextSafe from '@/hooks/useContextSafe';
+
+gsap.registerPlugin(useGSAP);
 
 interface Props {
-    onSubmit?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    onSubmit?: () => void;
 }
 
 interface Fragment {
@@ -44,6 +49,7 @@ const defaultValues: State = {
 
 export const GameSettings: FC<Props> = ({ onSubmit }) => {
     const [state, dispatch] = useReducer(reducer, defaultValues);
+    const contextSafe = useContextSafe();
 
     const fragments: Fragment[] = useMemo(
         (): Fragment[] => [
@@ -77,8 +83,37 @@ export const GameSettings: FC<Props> = ({ onSubmit }) => {
         []
     );
 
+    useGSAP(() => {
+        gsap.from('#game-settings', {
+            duration: 1,
+            opacity: 0,
+            ease: 'back.inOut',
+            y: -200,
+        });
+    }, []);
+
+    const handleSubmit = contextSafe(
+        (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            event.preventDefault();
+            gsap.to('#game-settings', {
+                duration: 0.5,
+                opacity: 0,
+                ease: 'back.inOut',
+                y: -200,
+                onComplete: () => {
+                    if (onSubmit) {
+                        onSubmit();
+                    }
+                },
+            });
+        }
+    );
+
     return (
-        <form className="flex flex-col gap-12 p-8 min-w-1/4 border border-solid border-border rounded-xl">
+        <form
+            id="game-settings"
+            className="flex flex-col gap-12 p-8 min-w-1/4 border border-solid border-border rounded-xl"
+        >
             <h1 className="w-full text-center font-semibold text-2xl">
                 Settings
             </h1>
@@ -96,7 +131,7 @@ export const GameSettings: FC<Props> = ({ onSubmit }) => {
 
             {onSubmit && (
                 <div className="w-full flex justify-center">
-                    <Button onClick={onSubmit}>Play</Button>
+                    <Button onClick={handleSubmit}>Play</Button>
                 </div>
             )}
         </form>
