@@ -6,6 +6,12 @@ import gsap from 'gsap';
 import useContextSafe from '@/hooks/useContextSafe';
 import { defaultValues, reducer } from './reducer';
 import type { GameOptions } from '@/types/game-settings';
+import {
+    maxAttempt,
+    maxLength,
+    minAttempt,
+    minLength,
+} from '@/constants/game-settings';
 
 gsap.registerPlugin(useGSAP);
 
@@ -30,7 +36,8 @@ export const GameSettings: FC<Props> = ({ onSubmit }) => {
                 label: 'Word length',
                 sliderProps: {
                     defaultValue: [state.length],
-                    max: 10,
+                    min: minLength,
+                    max: maxLength,
                     step: 1,
                     className: 'w-full',
                     onValueChange: (value: number[]) =>
@@ -42,8 +49,8 @@ export const GameSettings: FC<Props> = ({ onSubmit }) => {
                 label: 'Amount of attempts',
                 sliderProps: {
                     defaultValue: [state.attempts],
-                    max: 10,
-                    min: 2,
+                    max: maxAttempt,
+                    min: minAttempt,
                     step: 1,
                     className: 'w-full',
                     onValueChange: (value: number[]) =>

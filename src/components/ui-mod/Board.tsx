@@ -57,7 +57,7 @@ export const Board: FC<Props> = ({ rows = 6, letters = 5 }) => {
 
             if (symbol === 'backspace') {
                 updated[activeRow] = currentWord.slice(0, -1);
-            } else if (currentWord.length < 5) {
+            } else if (currentWord.length < letters) {
                 updated[activeRow] = currentWord + symbol.toLocaleUpperCase();
             }
 
