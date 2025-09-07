@@ -7,13 +7,14 @@ import type { KeyboardColors } from '@/types/colors';
 
 interface Props {
     rows?: number;
+    letters?: number;
 }
 
 const generateRandomNumber = (max: number) => {
     return Math.round(Math.random() * max);
 };
 
-export const Board: FC<Props> = ({ rows = 6 }) => {
+export const Board: FC<Props> = ({ rows = 6, letters = 5 }) => {
     const [words, setWords] = useState<string[]>(
         Array.from<string>({ length: rows }).fill('')
     );
@@ -24,7 +25,7 @@ export const Board: FC<Props> = ({ rows = 6 }) => {
 
     const handleClick = (symbol: string) => {
         if (symbol === 'enter') {
-            if (words[activeRow].length === 5) {
+            if (words[activeRow].length === letters) {
                 const currentColors: Color[] = colorizeSlots({
                     correct: dailyWord.current.toUpperCase(),
                     input: words[activeRow],
@@ -68,7 +69,12 @@ export const Board: FC<Props> = ({ rows = 6 }) => {
         <>
             <section className="flex flex-col gap-1">
                 {words.map((word: string, index: number) => (
-                    <GameField key={index} word={word} colors={colors[index]} />
+                    <GameField
+                        key={index}
+                        letters={letters}
+                        word={word}
+                        colors={colors[index]}
+                    />
                 ))}
             </section>
 

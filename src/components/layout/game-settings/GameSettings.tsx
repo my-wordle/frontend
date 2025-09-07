@@ -1,51 +1,23 @@
 import { Slider } from '@/components/ui/slider';
 import { useMemo, useReducer, type ComponentProps, type FC } from 'react';
-import Button from '../ui-mod/Button';
+import Button from '../../ui-mod/Button';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import useContextSafe from '@/hooks/useContextSafe';
+import { defaultValues, reducer } from './reducer';
+import type { GameOptions } from '@/types/game-settings';
 
 gsap.registerPlugin(useGSAP);
 
 interface Props {
-    onSubmit?: () => void;
+    onSubmit?: (gameOptions: GameOptions) => void;
 }
 
 interface Fragment {
-    key: keyof State;
+    key: keyof GameOptions;
     label: string;
     sliderProps: ComponentProps<typeof Slider>;
 }
-
-interface State {
-    length: number;
-    attempts: number;
-}
-
-interface Action {
-    type: keyof State;
-    payload: number;
-}
-
-const reducer = (state: State, action: Action): State => {
-    switch (action.type) {
-        case 'length':
-            return {
-                ...state,
-                length: action.payload,
-            };
-        case 'attempts':
-            return {
-                ...state,
-                attempts: action.payload,
-            };
-    }
-};
-
-const defaultValues: State = {
-    length: 5,
-    attempts: 6,
-};
 
 export const GameSettings: FC<Props> = ({ onSubmit }) => {
     const [state, dispatch] = useReducer(reducer, defaultValues);
@@ -95,6 +67,7 @@ export const GameSettings: FC<Props> = ({ onSubmit }) => {
     const handleSubmit = contextSafe(
         (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
             event.preventDefault();
+
             gsap.to('#game-settings', {
                 duration: 0.5,
                 opacity: 0,
@@ -102,7 +75,7 @@ export const GameSettings: FC<Props> = ({ onSubmit }) => {
                 y: -200,
                 onComplete: () => {
                     if (onSubmit) {
-                        onSubmit();
+                        onSubmit(state);
                     }
                 },
             });
