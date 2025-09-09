@@ -1,8 +1,8 @@
-import { useMemo, useState, type ReactElement } from 'react';
-import Greeting from './components/Greeting';
 import GameSettings from '@/components/layout/game-settings/GameSettings';
 import Board from '@/components/ui-mod/Board';
 import type { GameOptions } from '@/types/game-settings';
+import { useMemo, useState, type ReactElement } from 'react';
+import Greeting from './components/Greeting';
 
 export const MainPage = () => {
     const [currentStep, setCurrentStep] = useState<number>(0);

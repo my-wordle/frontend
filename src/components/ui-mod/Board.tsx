@@ -1,9 +1,11 @@
 import { dailyWords } from '@/constants/words';
-import { useRef, useState, type FC } from 'react';
+import { useEffect, useRef, useState, type FC } from 'react';
 import GameField from './GameField';
 import KeyBoard from './KeyBoard';
 import { colorizeKeys, colorizeSlots, type Color } from '@/lib/colorize-slots';
 import type { KeyboardColors } from '@/types/colors';
+import GameOver from '../layout/game-over/GameOver';
+import ModalWrapper from './ModalWrapper';
 
 interface Props {
     rows?: number;
@@ -14,14 +16,17 @@ const generateRandomNumber = (max: number) => {
     return Math.round(Math.random() * max);
 };
 
+const getArrayOfEmptyStrings = (length: number): string[] => {
+    return Array.from<string>({ length }).fill('');
+};
+
 export const Board: FC<Props> = ({ rows = 6, letters = 5 }) => {
-    const [words, setWords] = useState<string[]>(
-        Array.from<string>({ length: rows }).fill('')
-    );
+    const [words, setWords] = useState<string[]>(getArrayOfEmptyStrings(rows));
     const [colors, setColors] = useState<Color[][]>([]);
     const [activeRow, setActiveRow] = useState<number>(0);
     const [keyboardColors, setKeyboardColors] = useState<KeyboardColors>({});
-    const dailyWord = useRef<string>(dailyWords[generateRandomNumber(7)]);
+    const [result, setResult] = useState<'win' | 'lose' | null>(null);
+    const dailyWord = useRef<string>(dailyWords[generateRandomNumber(10)]);
 
     const handleClick = (symbol: string) => {
         if (symbol === 'enter') {
@@ -47,6 +52,16 @@ export const Board: FC<Props> = ({ rows = 6, letters = 5 }) => {
                 }));
 
                 setActiveRow((prevRow) => Math.min(prevRow + 1, rows - 1));
+
+                if (words[activeRow] === dailyWord.current.toUpperCase()) {
+                    setResult('win');
+                }
+
+                if (
+                    words.filter((word: string) => word !== '').length === rows
+                ) {
+                    setResult('lose');
+                }
             }
             return;
         }
@@ -65,6 +80,14 @@ export const Board: FC<Props> = ({ rows = 6, letters = 5 }) => {
         });
     };
 
+    const reset = () => {
+        setWords(getArrayOfEmptyStrings(rows));
+        setColors([]);
+        setActiveRow(0);
+        setKeyboardColors({});
+        setResult(null);
+    };
+
     return (
         <>
             <section className="flex flex-col gap-1">
@@ -79,6 +102,16 @@ export const Board: FC<Props> = ({ rows = 6, letters = 5 }) => {
             </section>
 
             <KeyBoard onClick={handleClick} colors={keyboardColors} />
+
+            {result && (
+                <ModalWrapper>
+                    <GameOver
+                        result={result}
+                        correctWord={dailyWord.current.toUpperCase()}
+                        onRetry={reset}
+                    />
+                </ModalWrapper>
+            )}
         </>
     );
 };
