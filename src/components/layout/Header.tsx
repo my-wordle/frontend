@@ -67,7 +67,7 @@ export const Header = () => {
     });
 
     return (
-        <header className="w-full p-8 flex justify-end gap-8 z-20">
+        <header className="w-full p-8 flex justify-end gap-8 z-20 fixed left-0 top-0">
             <div id="header-item">
                 <TooltipManager content={<h1>Help</h1>} options={options}>
                     <QuestionMark className={iconClasses} />

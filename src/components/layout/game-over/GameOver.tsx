@@ -3,6 +3,7 @@ import Trophy from '@/assets/icons/trophy.svg?react';
 import Cross from '@/assets/icons/cross.svg?react';
 import { useMemo, useRef, type FC, type FunctionComponent } from 'react';
 import Animations, { type AnimationsRef } from './Animations';
+import { useNavigate } from 'react-router';
 
 type Result = 'win' | 'lose';
 
@@ -13,6 +14,7 @@ interface Props {
 }
 
 const GameOver: FC<Props> = ({ result, correctWord, onRetry }) => {
+    const navigate = useNavigate();
     const wrapper = useRef<HTMLElement | null>(null);
     const animationsRef = useRef<AnimationsRef | null>(null);
 
@@ -57,7 +59,12 @@ const GameOver: FC<Props> = ({ result, correctWord, onRetry }) => {
                         <span className="font-medium">{correctWord}</span>
                     </h2>
                     <div className="w-full flex justify-center gap-8 ">
-                        <Button className="text-md">Menu</Button>
+                        <Button
+                            className="text-md"
+                            onClick={() => navigate('/')}
+                        >
+                            Menu
+                        </Button>
                         <Button className="text-md" onClick={handleClick}>
                             {buttonSign}
                         </Button>

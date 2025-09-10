@@ -1,10 +1,10 @@
 import { dailyWords } from '@/constants/words';
-import { useEffect, useRef, useState, type FC } from 'react';
-import GameField from './GameField';
-import KeyBoard from './KeyBoard';
 import { colorizeKeys, colorizeSlots, type Color } from '@/lib/colorize-slots';
 import type { KeyboardColors } from '@/types/colors';
+import { useRef, useState, type FC } from 'react';
 import GameOver from '../layout/game-over/GameOver';
+import GameField from './GameField';
+import KeyBoard from './KeyBoard';
 import ModalWrapper from './ModalWrapper';
 
 interface Props {
