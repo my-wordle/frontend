@@ -6,6 +6,7 @@ export const randomizer = {
         try {
             const response: string[] = await axiosInstance.get('', {
                 params: { words: 1, length },
+                baseURL: 'https://random-word-api.vercel.app/api',
             });
 
             return response;

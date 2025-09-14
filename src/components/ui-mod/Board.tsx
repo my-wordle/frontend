@@ -8,6 +8,8 @@ import GameField from './GameField';
 import KeyBoard from './KeyBoard';
 import ModalWrapper from './ModalWrapper';
 import Loading from '../global/Loading';
+import type { WordValidatorResponse } from '@/types/check-word';
+import { wordValidator } from '@/service/requests/check-word';
 
 interface Props {
     rows?: number;
@@ -31,14 +33,32 @@ export const Board: FC<Props> = ({ rows = 6, letters = 5 }) => {
         return response;
     };
 
+    const doesExist = async (word: string): Promise<boolean> => {
+        const response: WordValidatorResponse = await wordValidator.check(word);
+        if (!response) {
+            return false;
+        }
+        return true;
+    };
+
     const { data: dailyWord, isPending } = useQuery({
         queryKey: ['word'],
         queryFn: getRandomWord,
     });
 
-    const handleClick = (symbol: string) => {
+    const handleClick = async (symbol: string) => {
         if (symbol === 'enter') {
             if (words[activeRow].length === letters) {
+                const word: string = words[activeRow];
+
+                const wordIsValid: boolean = await doesExist(
+                    word.toLowerCase()
+                );
+
+                if (!wordIsValid) {
+                    return;
+                }
+
                 const currentColors: Color[] = colorizeSlots({
                     correct: dailyWord![0].toUpperCase(),
                     input: words[activeRow],
