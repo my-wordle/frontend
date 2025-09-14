@@ -1,9 +1,12 @@
 import Gear from '@/assets/icons/gear.svg?react';
 import QuestionMark from '@/assets/icons/question-mark.svg?react';
 import useContextSafe from '@/hooks/useContextSafe';
+import { cn } from '@/lib/utils';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
-import { useState, type ComponentProps } from 'react';
+import { ArrowLeft } from 'lucide-react';
+import { useMemo, useState, type ComponentProps } from 'react';
+import { useLocation, useNavigate } from 'react-router';
 import TooltipManager from '../ui-mod/TooltipManager';
 import Settings from './Settings';
 
@@ -19,6 +22,8 @@ const options: ComponentProps<typeof TooltipManager>['options'] = {
 export const Header = () => {
     const safeContext = useContextSafe(document.getElementById('root')!);
     const [visible, setVisible] = useState<boolean>(false);
+    const location = useLocation();
+    const navigate = useNavigate();
 
     useGSAP(() => {
         gsap.from('#header-item', {
@@ -66,18 +71,41 @@ export const Header = () => {
         });
     });
 
-    return (
-        <header className="w-full p-8 flex justify-end gap-8 z-20 fixed left-0 top-0">
-            <div id="header-item">
-                <TooltipManager content={<h1>Help</h1>} options={options}>
-                    <QuestionMark className={iconClasses} />
-                </TooltipManager>
-            </div>
+    const isBackShown: boolean = useMemo((): boolean => {
+        return location.pathname !== '/';
+    }, [location.pathname]);
 
-            <div id="header-item">
-                <TooltipManager content={<h1>Settings</h1>} options={options}>
-                    <Gear className={iconClasses} onClick={handleOpen} />
-                </TooltipManager>
+    return (
+        <header
+            className={cn(
+                'w-full p-8 flex items-center z-20 fixed left-0 top-0',
+                isBackShown ? 'justify-between' : 'justify-end'
+            )}
+        >
+            {isBackShown && (
+                <ArrowLeft
+                    size={32}
+                    strokeWidth={2}
+                    className="cursor-pointer transition-all hover:scale-110"
+                    onClick={() => navigate(-1)}
+                />
+            )}
+
+            <div className="flex gap-8">
+                <div id="header-item">
+                    <TooltipManager content={<h1>Help</h1>} options={options}>
+                        <QuestionMark className={iconClasses} />
+                    </TooltipManager>
+                </div>
+
+                <div id="header-item">
+                    <TooltipManager
+                        content={<h1>Settings</h1>}
+                        options={options}
+                    >
+                        <Gear className={iconClasses} onClick={handleOpen} />
+                    </TooltipManager>
+                </div>
             </div>
 
             {visible && (

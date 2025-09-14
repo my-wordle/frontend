@@ -3,6 +3,7 @@ import Header from './components/layout/Header';
 import { useEffect } from 'react';
 import { isDarkModeAtom } from './store/theme';
 import { useAtom } from 'jotai';
+import Provider from './provider/Provider';
 
 function App() {
     const [isDarkMode] = useAtom(isDarkModeAtom);
@@ -20,10 +21,12 @@ function App() {
     }, [isDarkMode]);
 
     return (
-        <main className="w-screen h-screen flex flex-col">
-            <Header />
-            <Outlet />
-        </main>
+        <Provider>
+            <main className="w-screen h-screen flex flex-col">
+                <Header />
+                <Outlet />
+            </main>
+        </Provider>
     );
 }
 

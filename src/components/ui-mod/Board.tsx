@@ -1,20 +1,18 @@
-import { dailyWords } from '@/constants/words';
 import { colorizeKeys, colorizeSlots, type Color } from '@/lib/colorize-slots';
+import { randomizer } from '@/service/requests/generate-word';
 import type { KeyboardColors } from '@/types/colors';
-import { useRef, useState, type FC } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState, type FC } from 'react';
 import GameOver from '../layout/game-over/GameOver';
 import GameField from './GameField';
 import KeyBoard from './KeyBoard';
 import ModalWrapper from './ModalWrapper';
+import Loading from '../global/Loading';
 
 interface Props {
     rows?: number;
     letters?: number;
 }
-
-const generateRandomNumber = (max: number) => {
-    return Math.round(Math.random() * max);
-};
 
 const getArrayOfEmptyStrings = (length: number): string[] => {
     return Array.from<string>({ length }).fill('');
@@ -26,13 +24,23 @@ export const Board: FC<Props> = ({ rows = 6, letters = 5 }) => {
     const [activeRow, setActiveRow] = useState<number>(0);
     const [keyboardColors, setKeyboardColors] = useState<KeyboardColors>({});
     const [result, setResult] = useState<'win' | 'lose' | null>(null);
-    const dailyWord = useRef<string>(dailyWords[generateRandomNumber(10)]);
+    const queryCLient = useQueryClient();
+
+    const getRandomWord = async () => {
+        const response: string[] = await randomizer.getWord(letters);
+        return response;
+    };
+
+    const { data: dailyWord, isPending } = useQuery({
+        queryKey: ['word'],
+        queryFn: getRandomWord,
+    });
 
     const handleClick = (symbol: string) => {
         if (symbol === 'enter') {
             if (words[activeRow].length === letters) {
                 const currentColors: Color[] = colorizeSlots({
-                    correct: dailyWord.current.toUpperCase(),
+                    correct: dailyWord![0].toUpperCase(),
                     input: words[activeRow],
                 });
 
@@ -53,7 +61,7 @@ export const Board: FC<Props> = ({ rows = 6, letters = 5 }) => {
 
                 setActiveRow((prevRow) => Math.min(prevRow + 1, rows - 1));
 
-                if (words[activeRow] === dailyWord.current.toUpperCase()) {
+                if (words[activeRow] === dailyWord![0].toUpperCase()) {
                     setResult('win');
                 }
 
@@ -86,7 +94,12 @@ export const Board: FC<Props> = ({ rows = 6, letters = 5 }) => {
         setActiveRow(0);
         setKeyboardColors({});
         setResult(null);
+        queryCLient.invalidateQueries({ queryKey: ['word'] });
     };
+
+    if (isPending) {
+        return <Loading />;
+    }
 
     return (
         <>
@@ -107,7 +120,7 @@ export const Board: FC<Props> = ({ rows = 6, letters = 5 }) => {
                 <ModalWrapper>
                     <GameOver
                         result={result}
-                        correctWord={dailyWord.current.toUpperCase()}
+                        correctWord={dailyWord![0].toUpperCase()}
                         onRetry={reset}
                     />
                 </ModalWrapper>
