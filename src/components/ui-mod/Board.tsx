@@ -2,7 +2,7 @@ import { colorizeKeys, colorizeSlots, type Color } from '@/lib/colorize-slots';
 import { randomizer } from '@/service/requests/generate-word';
 import type { KeyboardColors } from '@/types/colors';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useState, type FC } from 'react';
+import { useEffect, useRef, useState, type FC } from 'react';
 import GameOver from '../layout/game-over/GameOver';
 import GameField from './GameField';
 import KeyBoard from './KeyBoard';
@@ -81,12 +81,17 @@ export const Board: FC<Props> = ({ rows = 6, letters = 5 }) => {
 
                 setActiveRow((prevRow) => Math.min(prevRow + 1, rows - 1));
 
-                if (words[activeRow] === dailyWord![0].toUpperCase()) {
+                const isCorrect: boolean =
+                    words[activeRow] === dailyWord![0].toUpperCase();
+
+                if (isCorrect) {
                     setResult('win');
                 }
 
                 if (
-                    words.filter((word: string) => word !== '').length === rows
+                    words.filter((word: string) => word !== '').length ===
+                        rows &&
+                    !isCorrect
                 ) {
                     setResult('lose');
                 }
