@@ -4,7 +4,7 @@ import type { KeyboardColors } from '@/types/colors';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState, type FC } from 'react';
 import GameOver from '../layout/game-over/GameOver';
-import GameField from './GameField';
+import GameField from './GameField/GameField';
 import KeyBoard from './KeyBoard';
 import ModalWrapper from './ModalWrapper';
 import Loading from '../global/Loading';
@@ -25,6 +25,7 @@ export const Board: FC<Props> = ({ rows = 6, letters = 5 }) => {
     const [colors, setColors] = useState<Color[][]>([]);
     const [activeRow, setActiveRow] = useState<number>(0);
     const [keyboardColors, setKeyboardColors] = useState<KeyboardColors>({});
+    const [isInvalid, setIsInvalid] = useState<boolean>(false);
     const [result, setResult] = useState<'win' | 'lose' | null>(null);
     const queryCLient = useQueryClient();
 
@@ -56,6 +57,7 @@ export const Board: FC<Props> = ({ rows = 6, letters = 5 }) => {
                 );
 
                 if (!wordIsValid) {
+                    setIsInvalid(true);
                     return;
                 }
 
@@ -135,6 +137,10 @@ export const Board: FC<Props> = ({ rows = 6, letters = 5 }) => {
                         letters={letters}
                         word={word}
                         colors={colors[index]}
+                        invalidWord={{
+                            active: index === activeRow && isInvalid,
+                            onComplete: () => setIsInvalid(false),
+                        }}
                     />
                 ))}
             </section>
